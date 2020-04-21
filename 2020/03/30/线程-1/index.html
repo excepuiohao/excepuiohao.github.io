@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Excepuio">
+
+
+    <meta name="subtitle" content="想干啥  继续想">
+
+
+
+    <meta name="keywords" content="bolg Excepuio">
+
+
+<title>线程-1 | Excepuio的博客</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Bentham&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Bentham&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">线程-1</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Excepuio</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 30, 2020&nbsp;&nbsp;15:46:34</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="线程之间共享和协助"><a href="#线程之间共享和协助" class="headerlink" title="线程之间共享和协助"></a>线程之间共享和协助</h4><h5 id="1：CPU核心数和线程数之间的关系"><a href="#1：CPU核心数和线程数之间的关系" class="headerlink" title="1：CPU核心数和线程数之间的关系"></a>1：CPU核心数和线程数之间的关系</h5><p>之前，CPU核心数：线程数=1:1。之后，引入了超线程技术，CPU核心数：线程数=1：2</p>
+<h5 id="2：CPU时间片轮转机制"><a href="#2：CPU时间片轮转机制" class="headerlink" title="2：CPU时间片轮转机制"></a>2：CPU时间片轮转机制</h5><p>CPU会把线程进行切换，即将一个正在工作的线程让出来给另一个线程，这时候就会花费时间：CPU要保存上一个线程在寄存器中的值、分配内容等，这就叫做上下文切换。大概一次线程的上下文切换需要花费5000-20000个时钟周期。所以要注意上下文切换对程序性能的影响，防止发生多线程工作时间还不如单线程的情况发生。</p>
+<h5 id="3：线程和进程"><a href="#3：线程和进程" class="headerlink" title="3：线程和进程"></a>3：线程和进程</h5><p>进程：程序运行最小的资源单位，由操作管理，内部可能有多个线程。多个线程之间会共享这个进程的资源。</p>
+<p>线程：CPU调度的最小单位，不能独立运行，要依附由某个进程，不拥有独立的CPU资源，要由进程启动后分配给其资源。</p>
+<h5 id="4：并行和并发"><a href="#4：并行和并发" class="headerlink" title="4：并行和并发"></a>4：并行和并发</h5><p>并行：某一时间刻度内最大处理的事情（马路最多并行3辆车）</p>
+<p>并发：某一时间段内最多处理的事情（马路一小时内最多行驶1000辆车）</p>
+<h4 id="Java线程"><a href="#Java线程" class="headerlink" title="Java线程"></a>Java线程</h4><p>java程序天生就是多线程的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    &#x2F;&#x2F;虚拟机线程管理的接口</span><br><span class="line">    ThreadMXBean threadMXBean &#x3D; ManagementFactory.getThreadMXBean();</span><br><span class="line">    ThreadInfo[] threadInfos &#x3D; threadMXBean.dumpAllThreads(false, false);</span><br><span class="line">    for (ThreadInfo threadInfo : threadInfos) &#123;</span><br><span class="line">        System.out.println(&quot;[Id]:&quot; + threadInfo.getThreadId() + &quot; [name]:&quot; + threadInfo.getThreadName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1：线程的三种方式"><a href="#1：线程的三种方式" class="headerlink" title="1：线程的三种方式"></a>1：线程的三种方式</h5><p>一：继承类Thread</p>
+<p>二：实现Runnable</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public static class ThreadRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;我继承自Runnable&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ThreadRunnable threadRunnable &#x3D; new ThreadRunnable();</span><br><span class="line">new Thread(threadRunnable).start();</span><br></pre></td></tr></table></figure>
+
+<p>三：实现Callable接口 ，允许有多个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static class ThreadCallable implements Callable&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String call() throws Exception &#123;</span><br><span class="line">        return &quot;我继承自Callable&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ThreadCallable threadCallable &#x3D; new ThreadCallable();</span><br><span class="line">FutureTask&lt;String&gt; futureTask &#x3D; new FutureTask&lt;&gt;(threadCallable);</span><br><span class="line">new Thread(futureTask).start();</span><br><span class="line">try &#123;</span><br><span class="line">      System.out.println(futureTask.get());</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2：线程如何安全停止"><a href="#2：线程如何安全停止" class="headerlink" title="2：线程如何安全停止"></a>2：线程如何安全停止</h5><p>线程是协作式的。</p>
+<p>1：stop方法</p>
+<p>终结线程的时候，会强制终结一个线程，不会去管线程的资源释放等等</p>
+<p>2：resume， suspend方法</p>
+<p>挂起方法，线程不会释放资源。别的线程来拿资源，会发生死锁情况    </p>
+<p>3：interrupt，isinterruptured，方法</p>
+<p>interrupt方法中断一个线程，并不是强行关闭。和线程打一个招呼，我要中断你了。但是该线程是否中断，由该线程自己决定。只是将中断标志位置为ture</p>
+<p>isinterruptured判断当前线程是否处于一个中断状态</p>
+<p>static方法interrupt方法判断当前线程是否处于中断状态，调用之后，会把中断标志位改为false</p>
+<h5 id="3：线程的生命周期"><a href="#3：线程的生命周期" class="headerlink" title="3：线程的生命周期"></a>3：线程的生命周期</h5><p>1：新建</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thread thread &#x3D;new Thread();</span><br></pre></td></tr></table></figure>
+
+<p>2：就绪</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread.start();</span><br></pre></td></tr></table></figure>
+
+<p>因为CPU时间片轮转机制，线程拿到执行权后就会运行</p>
+<p>3：运行<br>可使用thread.join()获取执行权</p>
+<p>也可使用yield()让出CPU使用权，下次也可能继续是该线程执行。回到就绪状态</p>
+<p>4：阻塞</p>
+<p>在运行状态可以使用wait()或者sleep()到阻塞状态</p>
+<p>在运行状态可以使用notify()或notifyAll()或interrupt()方法回到就绪状态</p>
+<p>5：死亡</p>
+<p>run()执行完毕回到死亡状态</p>
+<p>stop() .setDeamon()也可回到死亡状态</p>
+<h5 id="4：线程的优先级和守护线程"><a href="#4：线程的优先级和守护线程" class="headerlink" title="4：线程的优先级和守护线程"></a>4：线程的优先级和守护线程</h5><p>优先级：线程的优先级为1~10 缺省为5 .</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread.setPriority(5)；</span><br></pre></td></tr></table></figure>
+
+<p>设置完之后不代表该线程就会优先执行</p>
+<p>守护线程：</p>
+<p>守护线程和主线程共死。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;一定在start方法之前调用</span><br><span class="line">thread.setDaemon(true);</span><br></pre></td></tr></table></figure>
+
+<p>守护线程的try finally不能保证一定执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public static class UseThread extends Thread &#123;</span><br><span class="line">        public UseThread(String name) &#123;</span><br><span class="line">            super(name);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            String name &#x3D; Thread.currentThread().getName();</span><br><span class="line">            try &#123;</span><br><span class="line">                while (!isInterrupted()) &#123;</span><br><span class="line">                    System.out.println(&quot;name:&quot; + name);</span><br><span class="line">                    System.out.println(name + &quot; interrupt  flag is &quot; + isInterrupted());</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                System.out.println(&quot;test&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">            Thread thread &#x3D; new UseThread(&quot;hhh&quot;);</span><br><span class="line">            thread.setDaemon(true);</span><br><span class="line">            thread.start();</span><br><span class="line">            thread.sleep(20);</span><br><span class="line">            &#x2F;&#x2F;thread.interrupt();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="5：线程之间的共享"><a href="#5：线程之间的共享" class="headerlink" title="5：线程之间的共享"></a>5：线程之间的共享</h5><p>synchronized内置锁</p>
+<p>确保原子性和可见性</p>
+<p>对象锁：synchronized修饰了一个非静态方法，或者再方法体内部使用了synchronized（this）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private synchronized void test()&#123;</span><br><span class="line"> synchronized（this）</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类锁：synchronized修饰了一个静态方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private static synchronized void test()&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>volatile关键字</p>
+<p>确保可见性</p>
+<p>虚拟机提供的最轻量级的线程同步机制。修饰的变量在使用时，会从主内存获取最新的，同时使自己的变量失效，同时将自己的最终结果写入到主内存中，其它线程在使用变量时就会从主内存中读取，同时它也不是安全的，适用于只有一个线程写，多个线程读的场景。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">private static class VolatileVar implements Runnable &#123;</span><br><span class="line">    public volatile int a &#x3D; 0;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        String threadName &#x3D; Thread.currentThread().getName();</span><br><span class="line">        a &#x3D; a++;</span><br><span class="line">        System.out.println(threadName + &quot;:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot; + a);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(100);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        a &#x3D; a + 1;</span><br><span class="line">        System.out.println(threadName + &quot;:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot; + a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    VolatileVar v &#x3D; new VolatileVar();</span><br><span class="line">    Thread t1 &#x3D; new Thread(v);</span><br><span class="line">    Thread t2 &#x3D; new Thread(v);</span><br><span class="line">    Thread t3 &#x3D; new Thread(v);</span><br><span class="line">    Thread t4 &#x3D; new Thread(v);</span><br><span class="line">    t1.start();</span><br><span class="line">    t2.start();</span><br><span class="line">    t3.start();</span><br><span class="line">    t4.start();</span><br><span class="line">&#125;</span><br><span class="line">运行结果：</span><br><span class="line">Thread-0:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;0</span><br><span class="line">Thread-3:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;0</span><br><span class="line">Thread-2:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;0</span><br><span class="line">Thread-1:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;0</span><br><span class="line">Thread-2:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;2</span><br><span class="line">Thread-3:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;2</span><br><span class="line">Thread-0:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;2</span><br><span class="line">Thread-1:&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;2</span><br></pre></td></tr></table></figure>
+
+<p>ThreadLocal关键字</p>
+<p>确保每个线程只使用自己部分的变量。每个线程都有自己的副本。一般在连接池中使用，和Spring的事务机制中。因为每个线程都会保有副本，一般不保存比较大的资源，不然会造成资源浪费</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">static ThreadLocal&lt;Integer&gt; threadLocal &#x3D; new ThreadLocal&lt;Integer&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        protected Integer initialValue() &#123;</span><br><span class="line">            return 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#x2F;&#x2F;设置值</span><br><span class="line">threadLocal.set(2);</span><br><span class="line">&#x2F;&#x2F;获取值</span><br><span class="line">threadLocal.get()</span><br><span class="line">&#x2F;&#x2F;垃圾回收</span><br><span class="line">threadLocal.remove()</span><br></pre></td></tr></table></figure>
+
+<h5 id="6：注意点"><a href="#6：注意点" class="headerlink" title="6：注意点"></a>6：注意点</h5><p>一：线程A，执行了线程B的join方法，线程A必须要等待B执行完成了以后，线程A才能继续自己的工作</p>
+<p>二：线程在执行yield()以后，持有的锁是不释放的</p>
+<p>三：sleep()方法被调用以后，持有的锁是不释放的</p>
+<p>四：调动方法之前，必须要持有锁。调用了wait()方法以后，锁就会被释放，当wait方法返回的时候，线程会重新持有锁</p>
+<p>五：调动方法之前，必须要持有锁，调用notify()方法本身不会释放锁的</p>
+<p>六：应该尽量使用notifyAll，使用notify因为有可能发生信号丢失的的情况</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Excepuio</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://yoursite.com/2020/03/30/%E7%BA%BF%E7%A8%8B-1/">http://yoursite.com/2020/03/30/%E7%BA%BF%E7%A8%8B-1/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/03/29/hello-world/">Hello World</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Excepuio | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
